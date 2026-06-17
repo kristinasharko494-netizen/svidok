@@ -27,14 +27,14 @@
   .auth-line{display:flex;align-items:center;gap:12px}
   .auth-line::before,.auth-line::after{content:'';flex:1;height:1px;background:var(--border)}
   .auth-line span{font-size:11px;color:var(--dim)}
-  .err{font-size:12px;color:#c0392b;text-align:center;display:none}
+  .err{font-size:12px;color:#c0392b;text-align:center;display:none;padding:8px}
   .onboard-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px;gap:20px}
   .onboard-q{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--hi);text-align:center;line-height:1.4}
   .onboard-hint{font-size:12px;color:var(--dim);text-align:center}
-  .onboard-input{background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:13px 15px;color:var(--hi);font-family:'Inter',sans-serif;font-size:15px;font-weight:300;outline:none;width:100%;max-width:340px;text-align:center;transition:border-color 0.2s}
-  .onboard-input:focus{border-color:var(--muted)}
-  .onboard-btn{background:none;border:1px solid var(--muted);border-radius:2px;padding:11px 28px;color:var(--text);font-family:'Inter',sans-serif;font-size:12px;cursor:pointer;transition:all 0.2s}
-  .onboard-btn:hover{border-color:var(--accent);color:var(--accent-l)}
+  .ob-input{background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:13px 15px;color:var(--hi);font-family:'Inter',sans-serif;font-size:15px;font-weight:300;outline:none;width:100%;max-width:340px;text-align:center;transition:border-color 0.2s}
+  .ob-input:focus{border-color:var(--muted)}
+  .ob-btn{background:var(--accent);border:none;border-radius:2px;padding:13px 32px;color:var(--hi);font-family:'Inter',sans-serif;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:background 0.2s;width:100%;max-width:340px}
+  .ob-btn:hover{background:var(--accent-l)}
   .dots{display:flex;gap:6px}
   .dot{width:4px;height:4px;border-radius:50%;background:var(--muted)}
   .dot.active{background:var(--accent)}
@@ -88,7 +88,6 @@
       <div class="auth-switch">Немає акаунту? <a onclick="showReg()">Зареєструватись</a></div>
     </div>
     <div class="auth-form" id="reg-form" style="display:none">
-      <input class="auth-input" id="reg-name" type="text" placeholder="Як тебе звати?">
       <input class="auth-input" id="reg-email" type="email" placeholder="Email">
       <input class="auth-input" id="reg-pass" type="password" placeholder="Пароль" onkeydown="if(event.key==='Enter')doRegister()">
       <button class="auth-btn" onclick="doRegister()">Створити акаунт</button>
@@ -106,10 +105,10 @@
       <div class="dot" id="d1"></div>
       <div class="dot" id="d2"></div>
     </div>
-    <div class="onboard-q" id="ob-q">Коли ти народилась?</div>
-    <div class="onboard-hint" id="ob-hint">день.місяць.рік — наприклад 14.06.1992</div>
-    <input class="onboard-input" id="ob-input" onkeydown="if(event.key==='Enter')nextOb()">
-    <button class="onboard-btn" onclick="nextOb()">Далі →</button>
+    <div class="onboard-q" id="ob-q">Як тебе звати?</div>
+    <div class="onboard-hint" id="ob-hint">Просто ім'я</div>
+    <input class="ob-input" id="ob-input" onkeydown="if(event.key==='Enter')nextOb()">
+    <button class="ob-btn" onclick="nextOb()">Далі →</button>
   </div>
 </div>
 
@@ -134,11 +133,16 @@
 </div>
 
 <script>
-const zodiacTraits={Овен:'пряма, діє швидко, відкрита',Телець:'повільно відкривається, цінує стабільність',Близнюки:'жвава, мінлива, любить розмаїття',Рак:'глибоко відчуває, потребує безпеки',Лев:'яскрава, потребує визнання',Діва:'аналітична, перфекціоністка',Терези:'шукає балансу, уникає конфліктів',Скорпіон:'інтенсивна, важко відкривається',Стрілець:'оптимістична, вільна',Козеріг:'амбітна, стримана',Водолій:'незалежна, тримає дистанцію',Риби:'чуттєва, інтуїтивна'};
-const lpMeaning={1:'лідер, незалежна',2:'дипломат, потребує гармонії',3:'творча, комунікабельна',4:'надійна, практична',5:'вільна, боїться обмежень',6:'турботлива, відповідальна',7:'мислитель, потребує самоти',8:'амбітна, орієнтована на результат',9:'мудра, альтруїстична',11:'інтуїт, натхненниця',22:'будівничий великого'};
+const zodiacTraits={Овен:'пряма, діє швидко',Телець:'повільно відкривається, цінує стабільність',Близнюки:'жвава, мінлива',Рак:'глибоко відчуває, потребує безпеки',Лев:'яскрава, потребує визнання',Діва:'аналітична, перфекціоністка',Терези:'шукає балансу',Скорпіон:'інтенсивна, важко відкривається',Стрілець:'оптимістична, вільна',Козеріг:'амбітна, стримана',Водолій:'незалежна',Риби:'чуттєва, інтуїтивна'};
+const lpMeaning={1:'лідер',2:'дипломат',3:'творча',4:'надійна',5:'вільна',6:'турботлива',7:'мислитель',8:'амбітна',9:'мудра',11:'інтуїт',22:'будівничий'};
 
 let user=null,history=[],loading=false,obStep=0,obData={};
-const obSteps=[{q:'Коли ти народилась?',hint:'день.місяць.рік — наприклад 14.06.1992',key:'birthdate'},{q:'Як тебе звати?',hint:'Просто ім\'я',key:'name'},{q:'Що зараз займає найбільше місця у твоїй голові?',hint:'Не те що важливо. Те що просто крутиться.',key:'first'}];
+
+const obSteps=[
+  {q:'Як тебе звати?',hint:"Просто ім'я",key:'name'},
+  {q:'Коли ти народилась?',hint:'день.місяць.рік — наприклад 14.06.1992',key:'birthdate'},
+  {q:'Що зараз займає найбільше місця у твоїй голові?',hint:'Не те що важливо. Те що просто крутиться.',key:'first'}
+];
 
 function showReg(){document.getElementById('login-form').style.display='none';document.getElementById('reg-form').style.display='flex'}
 function showLogin(){document.getElementById('reg-form').style.display='none';document.getElementById('login-form').style.display='flex'}
@@ -157,11 +161,12 @@ async function doLogin(){
 }
 
 async function doRegister(){
-  const name=document.getElementById('reg-name').value.trim();
   const email=document.getElementById('reg-email').value.trim();
-  if(!name||!email)return showErr('Заповни всі поля');
-  obData.name=name;obData.email=email;
-  showScreen('onboard');updateOb(0);
+  const pass=document.getElementById('reg-pass').value;
+  if(!email||!pass)return showErr('Заповни всі поля');
+  obData.email=email;
+  showScreen('onboard');
+  updateOb(0);
 }
 
 function updateOb(step){
@@ -170,31 +175,37 @@ function updateOb(step){
   const s=obSteps[step];
   document.getElementById('ob-q').textContent=s.q;
   document.getElementById('ob-hint').textContent=s.hint;
-  document.getElementById('ob-input').value='';
-  document.getElementById('ob-input').focus();
+  const input=document.getElementById('ob-input');
+  input.value='';
+  input.type=step===1?'text':'text';
+  setTimeout(()=>input.focus(),100);
 }
 
-async function nextOb(){
+function nextOb(){
   const val=document.getElementById('ob-input').value.trim();
   if(!val)return;
   obData[obSteps[obStep].key]=val;
-  if(obStep<obSteps.length-1){updateOb(obStep+1);return}
+  if(obStep<obSteps.length-1){
+    updateOb(obStep+1);
+    return;
+  }
+  createUser();
+}
+
+async function createUser(){
   try{
     const r=await fetch('/api/user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'createUser',email:obData.email,name:obData.name,birthdate:obData.birthdate})});
     const u=await r.json();
-    if(!u||!u.id)return showErr('Помилка створення. Спробуй ще раз.');
-    user=u;startChat(obData.first);
+    if(!u||!u.id){showErr('Помилка створення');return;}
+    user=u;
+    startChat(obData.first);
   }catch(e){showErr('Помилка з\'єднання')}
 }
-
-document.getElementById('ob-input').addEventListener('keydown',e=>{if(e.key==='Enter')nextOb()});
 
 function buildSystem(){
   const astro=user.astro?JSON.parse(user.astro):null;
   let ctx='';
-  if(astro){
-    ctx=`\nЩО ТИ ЗНАЄШ ПРО ЇЇ ПРИРОДУ:\nЗнак: ${astro.zodiac} — ${zodiacTraits[astro.zodiac]||''}\nКитайський знак: ${astro.chinese}\nЧисло шляху: ${astro.lifePath} — ${lpMeaning[astro.lifePath]||''}\nВикористовуй це внутрішньо. Ніколи не згадуй знаки прямо.`;
-  }
+  if(astro){ctx=`\nЩО ТИ ЗНАЄШ ПРО ЇЇ ПРИРОДУ:\nЗнак: ${astro.zodiac} — ${zodiacTraits[astro.zodiac]||''}\nКитайський знак: ${astro.chinese}\nЧисло шляху: ${astro.lifePath} — ${lpMeaning[astro.lifePath]||''}\nВикористовуй це внутрішньо. Ніколи не згадуй знаки прямо.`;}
   return`Ти — Свідок.\nТи близький друг який пам'ятає людину краще ніж вона сама.${ctx}\n\nПАМ'ЯТЬ:\n${user.memory||'Перша розмова.'}\n\nЯК ГОВОРИШ:\nПросто. Живими словами. Коротко.\nОдне питання. Ніколи три.\nІноді одне слово: "Розкажи." "І?" "Боляче?"\nНе починай з "Я".\n\nНЕ РОБИШ:\nНе оцінюєш. Не мотивуєш. Не радиш.\nНе списки. Не заголовки.\nПросто говориш.\n\nПІСЛЯ ВІДПОВІДІ додай рядок:\nMEMORY_UPDATE: [одне речення що важливо пам'ятати, або none]`;
 }
 
