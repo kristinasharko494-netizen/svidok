@@ -100,8 +100,10 @@
     </div>
     <div class="onboard-q" id="ob-q"></div>
     <div class="onboard-hint" id="ob-hint"></div>
-    <input class="ob-input" id="ob-input" type="text" autocomplete="off">
-    <button class="ob-btn" id="ob-btn">ДАЛІ →</button>
+    <form id="ob-form" onsubmit="handleObSubmit(event)" style="width:100%;display:flex;flex-direction:column;gap:16px">
+      <input class="ob-input" id="ob-input" name="answer" type="text" autocomplete="off" autocorrect="off">
+      <input type="submit" value="ДАЛІ →" style="background:var(--accent);border:none;border-radius:2px;padding:16px;color:var(--hi);font-family:Inter,sans-serif;font-size:13px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;width:100%;-webkit-appearance:none">
+    </form>
   </div>
 </div>
 
@@ -203,9 +205,10 @@ function doNextOb(){
   }).catch(function(){showErr('Помилка з\'єднання')});
 }
 
-document.getElementById('ob-btn').addEventListener('click',function(){doNextOb()});
-document.getElementById('ob-btn').addEventListener('touchend',function(e){e.preventDefault();doNextOb()});
-document.getElementById('ob-input').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();doNextOb()}});
+function handleObSubmit(e){
+  e.preventDefault();
+  doNextOb();
+}
 
 function buildSystem(){
   var astro=user.astro?JSON.parse(user.astro):null;
