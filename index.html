@@ -3,156 +3,86 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Свідок</title>
+<title>Svidok</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Inter:wght@300;400;500&display=swap');
-
-  * { margin:0; padding:0; box-sizing:border-box; }
-  :root {
-    --bg:#0A0A0A; --surface:#141414; --border:#222;
-    --muted:#333; --dim:#555; --text:#C2BDB4;
-    --hi:#EDE8E0; --accent:#7C6B52; --accent-l:#A08B6E;
-  }
-  html,body { height:100%; background:var(--bg); color:var(--text);
-    font-family:'Inter',sans-serif; font-weight:300; -webkit-font-smoothing:antialiased; }
-
-  /* ── SCREENS ── */
-  .screen { display:none; flex-direction:column; height:100dvh; }
-  .screen.active { display:flex; }
-
-  /* ── AUTH ── */
-  .auth-wrap {
-    flex:1; display:flex; flex-direction:column;
-    align-items:center; justify-content:center; padding:32px 24px; gap:32px;
-  }
-  .brand { text-align:center; }
-  .brand-name {
-    font-family:'Cormorant Garamond',serif; font-size:48px;
-    font-weight:300; letter-spacing:0.2em; color:var(--hi);
-  }
-  .brand-name span { color:var(--accent); }
-  .brand-sub { font-size:12px; color:var(--dim); letter-spacing:0.12em;
-    text-transform:uppercase; margin-top:8px; }
-  .auth-form { width:100%; max-width:360px; display:flex; flex-direction:column; gap:12px; }
-  .auth-input {
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:2px; padding:14px 16px; color:var(--hi);
-    font-family:'Inter',sans-serif; font-size:14px; font-weight:300;
-    outline:none; transition:border-color 0.2s; width:100%;
-  }
-  .auth-input::placeholder { color:var(--dim); }
-  .auth-input:focus { border-color:var(--muted); }
-  .auth-btn {
-    background:var(--accent); border:none; border-radius:2px;
-    padding:14px; color:var(--hi); font-family:'Inter',sans-serif;
-    font-size:13px; font-weight:400; letter-spacing:0.08em;
-    text-transform:uppercase; cursor:pointer; transition:background 0.2s;
-  }
-  .auth-btn:hover { background:var(--accent-l); }
-  .auth-switch { text-align:center; font-size:12px; color:var(--dim); }
-  .auth-switch a { color:var(--accent-l); cursor:pointer; text-decoration:none; }
-  .auth-line { display:flex; align-items:center; gap:12px; }
-  .auth-line::before,.auth-line::after {
-    content:''; flex:1; height:1px; background:var(--border); }
-  .auth-line span { font-size:11px; color:var(--dim); white-space:nowrap; }
-
-  /* ── ONBOARDING ── */
-  .onboard-wrap {
-    flex:1; display:flex; flex-direction:column;
-    align-items:center; justify-content:center; padding:40px 28px; gap:24px;
-  }
-  .onboard-q {
-    font-family:'Cormorant Garamond',serif; font-size:24px;
-    font-weight:300; color:var(--hi); text-align:center; line-height:1.4;
-  }
-  .onboard-hint { font-size:12px; color:var(--dim); text-align:center; }
-  .onboard-input {
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:2px; padding:14px 16px; color:var(--hi);
-    font-family:'Inter',sans-serif; font-size:15px; font-weight:300;
-    outline:none; width:100%; max-width:360px; text-align:center;
-    transition:border-color 0.2s;
-  }
-  .onboard-input:focus { border-color:var(--muted); }
-  .onboard-btn {
-    background:none; border:1px solid var(--muted); border-radius:2px;
-    padding:12px 32px; color:var(--text); font-family:'Inter',sans-serif;
-    font-size:13px; cursor:pointer; transition:all 0.2s;
-  }
-  .onboard-btn:hover { border-color:var(--accent); color:var(--accent-l); }
-  .onboard-progress { display:flex; gap:6px; }
-  .onboard-dot { width:4px; height:4px; border-radius:50%; background:var(--muted); }
-  .onboard-dot.active { background:var(--accent); }
-
-  /* ── CHAT ── */
-  .chat-header {
-    display:flex; align-items:center; justify-content:space-between;
-    padding:18px 24px 14px; border-bottom:1px solid var(--border); flex-shrink:0;
-  }
-  .chat-logo { font-family:'Cormorant Garamond',serif; font-size:20px;
-    font-weight:300; letter-spacing:0.14em; color:var(--hi); }
-  .chat-logo span { color:var(--accent); }
-  .chat-user-info { font-size:11px; color:var(--dim); text-align:right; }
-  .messages { flex:1; overflow-y:auto; padding:28px 20px;
-    display:flex; flex-direction:column; gap:24px; scrollbar-width:none; }
-  .messages::-webkit-scrollbar { width:0; }
-  .msg { display:flex; flex-direction:column; gap:5px; animation:fadeUp 0.35s ease both; }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-  .msg-who { font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--dim); padding:0 3px; }
-  .msg.user .msg-who { text-align:right; color:var(--accent); }
-  .msg-bubble { padding:14px 18px; border-radius:2px; line-height:1.75; font-size:15px; max-width:90%; }
-  .msg.bot .msg-bubble {
-    background:var(--surface); border-left:2px solid var(--accent);
-    font-family:'Cormorant Garamond',serif; font-size:17px; color:var(--hi);
-    align-self:flex-start; white-space:pre-wrap;
-  }
-  .msg.user .msg-bubble {
-    background:#161616; border:1px solid var(--border);
-    align-self:flex-end; font-size:14px;
-  }
-  .typing { display:flex; align-items:center; gap:5px;
-    padding:16px 18px; background:var(--surface);
-    border-left:2px solid var(--accent); border-radius:2px; width:fit-content; }
-  .typing span { width:4px; height:4px; background:var(--accent);
-    border-radius:50%; animation:pulse 1.4s ease infinite; }
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Inter:wght@300;400&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--bg:#0A0A0A;--surface:#141414;--border:#222;--muted:#333;--dim:#555;--text:#C2BDB4;--hi:#EDE8E0;--accent:#7C6B52;--accent-l:#A08B6E}
+  html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-weight:300;-webkit-font-smoothing:antialiased}
+  .screen{display:none;flex-direction:column;height:100dvh}
+  .screen.active{display:flex}
+  .auth-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;gap:28px}
+  .brand{text-align:center}
+  .brand-name{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;letter-spacing:0.22em;color:var(--hi)}
+  .brand-name span{color:var(--accent)}
+  .brand-sub{font-size:11px;color:var(--dim);letter-spacing:0.14em;text-transform:uppercase;margin-top:8px}
+  .auth-form{width:100%;max-width:340px;display:flex;flex-direction:column;gap:10px}
+  .auth-input{background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:13px 15px;color:var(--hi);font-family:'Inter',sans-serif;font-size:14px;font-weight:300;outline:none;transition:border-color 0.2s;width:100%}
+  .auth-input::placeholder{color:var(--dim)}
+  .auth-input:focus{border-color:var(--muted)}
+  .auth-btn{background:var(--accent);border:none;border-radius:2px;padding:13px;color:var(--hi);font-family:'Inter',sans-serif;font-size:12px;font-weight:400;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:background 0.2s}
+  .auth-btn:hover{background:var(--accent-l)}
+  .auth-switch{text-align:center;font-size:12px;color:var(--dim)}
+  .auth-switch a{color:var(--accent-l);cursor:pointer}
+  .auth-line{display:flex;align-items:center;gap:12px}
+  .auth-line::before,.auth-line::after{content:'';flex:1;height:1px;background:var(--border)}
+  .auth-line span{font-size:11px;color:var(--dim)}
+  .err{font-size:12px;color:#c0392b;text-align:center;display:none}
+  .onboard-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px;gap:20px}
+  .onboard-q{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--hi);text-align:center;line-height:1.4}
+  .onboard-hint{font-size:12px;color:var(--dim);text-align:center}
+  .onboard-input{background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:13px 15px;color:var(--hi);font-family:'Inter',sans-serif;font-size:15px;font-weight:300;outline:none;width:100%;max-width:340px;text-align:center;transition:border-color 0.2s}
+  .onboard-input:focus{border-color:var(--muted)}
+  .onboard-btn{background:none;border:1px solid var(--muted);border-radius:2px;padding:11px 28px;color:var(--text);font-family:'Inter',sans-serif;font-size:12px;cursor:pointer;transition:all 0.2s}
+  .onboard-btn:hover{border-color:var(--accent);color:var(--accent-l)}
+  .dots{display:flex;gap:6px}
+  .dot{width:4px;height:4px;border-radius:50%;background:var(--muted)}
+  .dot.active{background:var(--accent)}
+  .chat-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
+  .chat-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;letter-spacing:0.16em;color:var(--hi)}
+  .chat-logo span{color:var(--accent)}
+  .chat-meta{font-size:11px;color:var(--dim)}
+  .messages{flex:1;overflow-y:auto;padding:24px 18px;display:flex;flex-direction:column;gap:20px;scrollbar-width:none}
+  .messages::-webkit-scrollbar{width:0}
+  .msg{display:flex;flex-direction:column;gap:4px;animation:fadeUp 0.35s ease both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  .msg-who{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--dim);padding:0 3px}
+  .msg.user .msg-who{text-align:right;color:var(--accent)}
+  .msg-bubble{padding:13px 16px;border-radius:2px;line-height:1.75;max-width:90%}
+  .msg.bot .msg-bubble{background:var(--surface);border-left:2px solid var(--accent);font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--hi);align-self:flex-start;white-space:pre-wrap}
+  .msg.user .msg-bubble{background:#161616;border:1px solid var(--border);align-self:flex-end;font-size:14px}
+  .typing{display:flex;align-items:center;gap:5px;padding:14px 16px;background:var(--surface);border-left:2px solid var(--accent);border-radius:2px;width:fit-content}
+  .typing span{width:4px;height:4px;background:var(--accent);border-radius:50%;animation:pulse 1.4s ease infinite}
   .typing span:nth-child(2){animation-delay:0.2s}
   .typing span:nth-child(3){animation-delay:0.4s}
   @keyframes pulse{0%,80%,100%{opacity:0.2;transform:scale(0.8)}40%{opacity:1;transform:scale(1)}}
-  .input-area { padding:14px 20px 22px; border-top:1px solid var(--border);
-    flex-shrink:0; background:var(--bg); }
-  .input-wrap { display:flex; align-items:flex-end; gap:10px;
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:2px; padding:11px 14px; transition:border-color 0.2s; }
-  .input-wrap:focus-within { border-color:var(--muted); }
-  textarea { flex:1; background:none; border:none; outline:none; color:var(--hi);
-    font-family:'Inter',sans-serif; font-size:14px; font-weight:300;
-    line-height:1.6; resize:none; min-height:22px; max-height:100px; overflow-y:auto; }
-  textarea::placeholder { color:var(--dim); }
+  .input-area{padding:12px 18px 20px;border-top:1px solid var(--border);flex-shrink:0;background:var(--bg)}
+  .input-wrap{display:flex;align-items:flex-end;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:10px 13px;transition:border-color 0.2s}
+  .input-wrap:focus-within{border-color:var(--muted)}
+  textarea{flex:1;background:none;border:none;outline:none;color:var(--hi);font-family:'Inter',sans-serif;font-size:14px;font-weight:300;line-height:1.6;resize:none;min-height:22px;max-height:100px;overflow-y:auto}
+  textarea::placeholder{color:var(--dim)}
   textarea::-webkit-scrollbar{width:0}
-  .send-btn { background:none; border:none; cursor:pointer; color:var(--dim);
-    padding:2px; transition:color 0.2s; flex-shrink:0; }
-  .send-btn:hover{color:var(--accent-l)} .send-btn:disabled{opacity:0.3;cursor:default}
+  .send-btn{background:none;border:none;cursor:pointer;color:var(--dim);padding:2px;transition:color 0.2s;flex-shrink:0}
+  .send-btn:hover{color:var(--accent-l)}
+  .send-btn:disabled{opacity:0.3;cursor:default}
   .send-btn svg{width:17px;height:17px}
-  .chat-footer { text-align:center; font-size:11px; color:var(--dim); margin-top:8px; }
-  .privacy-note { background:var(--surface); border:1px solid var(--border);
-    border-radius:2px; padding:10px 14px; font-size:11px; color:var(--dim);
-    line-height:1.6; text-align:center; margin-bottom:20px; }
-  .privacy-note strong { color:var(--text); font-weight:400; }
+  .chat-footer{text-align:center;font-size:11px;color:var(--dim);margin-top:8px}
+  .privacy-note{background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:10px 14px;font-size:11px;color:var(--dim);line-height:1.6;text-align:center;margin-bottom:18px}
+  .privacy-note strong{color:var(--text);font-weight:400}
 </style>
 </head>
 <body>
 
-<!-- AUTH SCREEN -->
+<!-- AUTH -->
 <div class="screen active" id="screen-auth">
   <div class="auth-wrap">
     <div class="brand">
-      <div class="brand-name">С<span>В</span>ІДОК</div>
-      <div class="brand-sub">AI, який пам'ятає тебе</div>
+      <div class="brand-name">S<span>V</span>IDOK</div>
+      <div class="brand-sub">AI that remembers you</div>
     </div>
     <div class="auth-form" id="login-form">
       <input class="auth-input" id="login-email" type="email" placeholder="Email">
-      <input class="auth-input" id="login-pass" type="password" placeholder="Пароль"
-        onkeydown="if(event.key==='Enter')doLogin()">
+      <input class="auth-input" id="login-pass" type="password" placeholder="Пароль" onkeydown="if(event.key==='Enter')doLogin()">
       <button class="auth-btn" onclick="doLogin()">Увійти</button>
       <div class="auth-line"><span>або</span></div>
       <div class="auth-switch">Немає акаунту? <a onclick="showReg()">Зареєструватись</a></div>
@@ -160,50 +90,43 @@
     <div class="auth-form" id="reg-form" style="display:none">
       <input class="auth-input" id="reg-name" type="text" placeholder="Як тебе звати?">
       <input class="auth-input" id="reg-email" type="email" placeholder="Email">
-      <input class="auth-input" id="reg-pass" type="password" placeholder="Пароль"
-        onkeydown="if(event.key==='Enter')doRegister()">
+      <input class="auth-input" id="reg-pass" type="password" placeholder="Пароль" onkeydown="if(event.key==='Enter')doRegister()">
       <button class="auth-btn" onclick="doRegister()">Створити акаунт</button>
       <div class="auth-switch">Вже є акаунт? <a onclick="showLogin()">Увійти</a></div>
     </div>
-    <div id="auth-error" style="font-size:12px;color:#c0392b;text-align:center;display:none"></div>
+    <div class="err" id="auth-err"></div>
   </div>
 </div>
 
-<!-- ONBOARDING SCREEN -->
+<!-- ONBOARDING -->
 <div class="screen" id="screen-onboard">
   <div class="onboard-wrap">
-    <div class="onboard-progress">
-      <div class="onboard-dot active" id="dot-0"></div>
-      <div class="onboard-dot" id="dot-1"></div>
-      <div class="onboard-dot" id="dot-2"></div>
+    <div class="dots">
+      <div class="dot active" id="d0"></div>
+      <div class="dot" id="d1"></div>
+      <div class="dot" id="d2"></div>
     </div>
-    <div class="onboard-q" id="onboard-q">Коли ти народилась?</div>
-    <div class="onboard-hint" id="onboard-hint">день.місяць.рік — наприклад 14.06.1992</div>
-    <input class="onboard-input" id="onboard-input" placeholder="">
-    <button class="onboard-btn" onclick="nextOnboard()">Далі</button>
+    <div class="onboard-q" id="ob-q">Коли ти народилась?</div>
+    <div class="onboard-hint" id="ob-hint">день.місяць.рік — наприклад 14.06.1992</div>
+    <input class="onboard-input" id="ob-input" onkeydown="if(event.key==='Enter')nextOb()">
+    <button class="onboard-btn" onclick="nextOb()">Далі →</button>
   </div>
 </div>
 
-<!-- CHAT SCREEN -->
+<!-- CHAT -->
 <div class="screen" id="screen-chat">
   <div class="chat-header">
-    <div class="chat-logo">С<span>В</span>ІДОК</div>
-    <div class="chat-user-info" id="chat-user-info"></div>
+    <div class="chat-logo">S<span>V</span>IDOK</div>
+    <div class="chat-meta" id="chat-meta"></div>
   </div>
   <div class="messages" id="messages">
-    <div class="privacy-note">
-      <strong>Твої розмови приватні.</strong><br>
-      Ніхто не читає що ти пишеш — тільки ти і Свідок.
-    </div>
+    <div class="privacy-note"><strong>Твої розмови приватні.</strong><br>Ніхто не читає що ти пишеш — тільки ти і Свідок.</div>
   </div>
   <div class="input-area">
     <div class="input-wrap">
-      <textarea id="input" placeholder="Напиши що зараз…" rows="1"
-        oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
+      <textarea id="input" placeholder="Напиши що зараз…" rows="1" oninput="resize(this)" onkeydown="handleKey(event)"></textarea>
       <button class="send-btn" id="send-btn" onclick="send()" disabled>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </div>
     <div class="chat-footer">Свідок пам'ятає. Але не судить.</div>
@@ -211,385 +134,135 @@
 </div>
 
 <script>
-// ── CONFIG — REPLACE WITH YOUR KEYS ──────────────────────────────
-const SUPABASE_URL = 'https://wjdbqsedyhfbensqcgio.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_8-kG19h41JRAypTPZmNtdA_Nfl81_A_';
-const ANTHROPIC_KEY = 'sb_secret_CVkuV5jdotxFoEPFOm8qPg_CoR6wkwU';
-// ─────────────────────────────────────────────────────────────────
+const zodiacTraits={Овен:'пряма, діє швидко, відкрита',Телець:'повільно відкривається, цінує стабільність',Близнюки:'жвава, мінлива, любить розмаїття',Рак:'глибоко відчуває, потребує безпеки',Лев:'яскрава, потребує визнання',Діва:'аналітична, перфекціоністка',Терези:'шукає балансу, уникає конфліктів',Скорпіон:'інтенсивна, важко відкривається',Стрілець:'оптимістична, вільна',Козеріг:'амбітна, стримана',Водолій:'незалежна, тримає дистанцію',Риби:'чуттєва, інтуїтивна'};
+const lpMeaning={1:'лідер, незалежна',2:'дипломат, потребує гармонії',3:'творча, комунікабельна',4:'надійна, практична',5:'вільна, боїться обмежень',6:'турботлива, відповідальна',7:'мислитель, потребує самоти',8:'амбітна, орієнтована на результат',9:'мудра, альтруїстична',11:'інтуїт, натхненниця',22:'будівничий великого'};
 
-// ── ASTROLOGY & NUMEROLOGY ───────────────────────────────────────
-function getZodiac(day, month) {
-  const signs = [
-    [20,'Козеріг'],[19,'Водолій'],[20,'Риби'],[20,'Овен'],
-    [21,'Телець'],[21,'Близнюки'],[22,'Рак'],[22,'Лев'],
-    [23,'Діва'],[23,'Терези'],[22,'Скорпіон'],[22,'Стрілець'],[31,'Козеріг']
-  ];
-  return day <= signs[month-1][0] ? signs[month-1][1] : signs[month][1];
+let user=null,history=[],loading=false,obStep=0,obData={};
+const obSteps=[{q:'Коли ти народилась?',hint:'день.місяць.рік — наприклад 14.06.1992',key:'birthdate'},{q:'Як тебе звати?',hint:'Просто ім\'я',key:'name'},{q:'Що зараз займає найбільше місця у твоїй голові?',hint:'Не те що важливо. Те що просто крутиться.',key:'first'}];
+
+function showReg(){document.getElementById('login-form').style.display='none';document.getElementById('reg-form').style.display='flex'}
+function showLogin(){document.getElementById('reg-form').style.display='none';document.getElementById('login-form').style.display='flex'}
+function showErr(m){const e=document.getElementById('auth-err');e.textContent=m;e.style.display='block';setTimeout(()=>e.style.display='none',3000)}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active')}
+
+async function doLogin(){
+  const email=document.getElementById('login-email').value.trim();
+  if(!email)return showErr('Введи email');
+  try{
+    const r=await fetch('/api/user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'getUser',email})});
+    const u=await r.json();
+    if(!u||!u.id)return showErr('Акаунт не знайдено');
+    user=u;startChat();
+  }catch(e){showErr('Помилка з\'єднання')}
 }
 
-function getChineseSign(year) {
-  const signs = ['Мавпа','Півень','Собака','Кабан','Пацюк','Бик',
-    'Тигр','Кролик','Дракон','Змія','Кінь','Коза'];
-  return signs[year % 12];
+async function doRegister(){
+  const name=document.getElementById('reg-name').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  if(!name||!email)return showErr('Заповни всі поля');
+  obData.name=name;obData.email=email;
+  showScreen('onboard');updateOb(0);
 }
 
-function getLifePath(day, month, year) {
-  const sum = str => str.split('').reduce((a,b)=>a+parseInt(b),0);
-  let n = sum(`${day}`) + sum(`${month}`) + sum(`${year}`);
-  while(n > 9 && n !== 11 && n !== 22) { n = sum(`${n}`); }
-  return n;
+function updateOb(step){
+  obStep=step;
+  [0,1,2].forEach(i=>document.getElementById('d'+i).classList.toggle('active',i<=step));
+  const s=obSteps[step];
+  document.getElementById('ob-q').textContent=s.q;
+  document.getElementById('ob-hint').textContent=s.hint;
+  document.getElementById('ob-input').value='';
+  document.getElementById('ob-input').focus();
 }
 
-const lifePathMeaning = {
-  1:'лідер, незалежна, прагне бути першою',
-  2:'дипломат, чуттєва, потребує гармонії',
-  3:'творча, комунікабельна, любить виражати себе',
-  4:'надійна, практична, цінує стабільність',
-  5:'вільна, допитлива, боїться обмежень',
-  6:'турботлива, відповідальна, шукає балансу',
-  7:'мислитель, інтуїтивна, потребує самоти',
-  8:'амбітна, сильна, орієнтована на результат',
-  9:'мудра, альтруїстична, живе великими ідеями',
-  11:'інтуїт, чутлива до тонкого, натхненниця',
-  22:'будівничий великого, практичний ідеаліст'
-};
-
-const zodiacTraits = {
-  'Овен':'пряма, діє швидко, не любить чекати, відкрита',
-  'Телець':'повільно відкривається, цінує стабільність, глибока',
-  'Близнюки':'жвава, мінлива, любить розмаїття, іноді поверхнева',
-  'Рак':'глибоко відчуває, захищає себе, потребує безпеки',
-  'Лев':'яскрава, потребує визнання, щедра',
-  'Діва':'аналітична, перфекціоністка, критична до себе',
-  'Терези':'шукає балансу, уникає конфліктів, дипломатична',
-  'Скорпіон':'інтенсивна, глибока, важко відкривається',
-  'Стрілець':'оптимістична, вільна, боїться обмежень',
-  'Козеріг':'амбітна, стримана, відкривається повільно',
-  'Водолій':'незалежна, оригінальна, тримає дистанцію',
-  'Риби':'чуттєва, інтуїтивна, губиться в емоціях'
-};
-
-function buildAstroProfile(birthdate) {
-  try {
-    const parts = birthdate.split('.');
-    const day = parseInt(parts[0]);
-    const month = parseInt(parts[1]);
-    const year = parseInt(parts[2]);
-    const zodiac = getZodiac(day, month);
-    const chinese = getChineseSign(year);
-    const lifePath = getLifePath(day, month, year);
-    return { zodiac, chinese, lifePath,
-      zodiacTraits: zodiacTraits[zodiac] || '',
-      lifePathMeaning: lifePathMeaning[lifePath] || '' };
-  } catch(e) { return null; }
+async function nextOb(){
+  const val=document.getElementById('ob-input').value.trim();
+  if(!val)return;
+  obData[obSteps[obStep].key]=val;
+  if(obStep<obSteps.length-1){updateOb(obStep+1);return}
+  try{
+    const r=await fetch('/api/user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'createUser',email:obData.email,name:obData.name,birthdate:obData.birthdate})});
+    const u=await r.json();
+    if(!u||!u.id)return showErr('Помилка створення. Спробуй ще раз.');
+    user=u;startChat(obData.first);
+  }catch(e){showErr('Помилка з\'єднання')}
 }
 
-// ── SYSTEM PROMPT ─────────────────────────────────────────────────
-function buildSystemPrompt(profile) {
-  const astro = profile.astro;
-  let astroContext = '';
-  if(astro) {
-    astroContext = `
-ЩО ТИ ЗНАЄШ ПРО ЇЇ ПРИРОДУ (з дати народження):
-Знак зодіаку: ${astro.zodiac} — ${astro.zodiacTraits}
-Китайський знак: ${astro.chinese}
-Число життєвого шляху: ${astro.lifePath} — ${astro.lifePathMeaning}
+document.getElementById('ob-input').addEventListener('keydown',e=>{if(e.key==='Enter')nextOb()});
 
-Використовуй це як внутрішнє знання.Ніколи не кажи "за твоїм знаком зодіаку".
-Просто знай це і говори з урахуванням її природи.`;
+function buildSystem(){
+  const astro=user.astro?JSON.parse(user.astro):null;
+  let ctx='';
+  if(astro){
+    ctx=`\nЩО ТИ ЗНАЄШ ПРО ЇЇ ПРИРОДУ:\nЗнак: ${astro.zodiac} — ${zodiacTraits[astro.zodiac]||''}\nКитайський знак: ${astro.chinese}\nЧисло шляху: ${astro.lifePath} — ${lpMeaning[astro.lifePath]||''}\nВикористовуй це внутрішньо. Ніколи не згадуй знаки прямо.`;
   }
-
-  const memory = profile.memory || '';
-  return `Ти — Свідок.
-
-Ти не асистент. Не коуч. Не терапевт.
-Ти — близький друг який пам'ятає цю людину краще ніж вона сама себе пам'ятає.
-${astroContext}
-
-ЩО ТИ ВЖЕ ЗНАЄШ ПРО ЦЮ ЛЮДИНУ:
-${memory || 'Перша розмова. Поки що нічого не знаю — слухаю.'}
-
-ЯК ТИ ГОВОРИШ:
-Просто. Без психологічних термінів. Живими словами.
-Коротко — одне речення краще за три.
-Одне питання. Ніколи не три.
-Іноді — одне слово. "Розкажи." "І?" "Боляче?"
-Не починай з "Я". Завжди про неї.
-
-Ніколи не кажи:
-— "я розумію як тобі важко"
-— "це важливо що ти поділилась"  
-— будь-що що звучить як скрипт
-
-Гумор — тільки коли момент дозволяє. Ніколи коли боляче.
-
-ЩО НЕ РОБИШ:
-Не оцінюєш. Не мотивуєш. Не радиш.
-Не робиш списки. Не пишеш заголовки.
-Просто говориш. Як говорить близька людина.
-
-ПІСЛЯ КОЖНОЇ ВІДПОВІДІ додай окремий рядок:
-MEMORY_UPDATE: [одне речення що важливо запам'ятати про цю людину з цієї розмови, або "none"]`;
+  return`Ти — Свідок.\nТи близький друг який пам'ятає людину краще ніж вона сама.${ctx}\n\nПАМ'ЯТЬ:\n${user.memory||'Перша розмова.'}\n\nЯК ГОВОРИШ:\nПросто. Живими словами. Коротко.\nОдне питання. Ніколи три.\nІноді одне слово: "Розкажи." "І?" "Боляче?"\nНе починай з "Я".\n\nНЕ РОБИШ:\nНе оцінюєш. Не мотивуєш. Не радиш.\nНе списки. Не заголовки.\nПросто говориш.\n\nПІСЛЯ ВІДПОВІДІ додай рядок:\nMEMORY_UPDATE: [одне речення що важливо пам'ятати, або none]`;
 }
 
-// ── SUPABASE ──────────────────────────────────────────────────────
-async function sbFetch(path, opts={}) {
-  const res = await fetch(SUPABASE_URL + path, {
-    ...opts,
-    headers: {
-      'apikey': SUPABASE_KEY,
-      'Authorization': 'Bearer ' + SUPABASE_KEY,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=representation',
-      ...opts.headers
-    }
-  });
-  return res.json();
-}
-
-async function getOrCreateUser(email, name, birthdate) {
-  const existing = await sbFetch(`/rest/v1/users?email=eq.${encodeURIComponent(email)}`);
-  if(existing && existing.length > 0) return existing[0];
-  const astro = buildAstroProfile(birthdate);
-  const created = await sbFetch('/rest/v1/users', {
-    method:'POST',
-    body: JSON.stringify({ email, name, birthdate, astro: JSON.stringify(astro), memory:'' })
-  });
-  return created[0];
-}
-
-async function updateMemory(userId, newMemory) {
-  await sbFetch(`/rest/v1/users?id=eq.${userId}`, {
-    method: 'PATCH',
-    headers: { 'Prefer': 'return=minimal' },
-    body: JSON.stringify({ memory: newMemory })
-  });
-}
-
-// ── APP STATE ─────────────────────────────────────────────────────
-let currentUser = null;
-let history = [];
-let isLoading = false;
-let onboardStep = 0;
-let onboardData = {};
-
-const onboardSteps = [
-  { q: 'Коли ти народилась?', hint: 'день.місяць.рік — наприклад 14.06.1992', key: 'birthdate' },
-  { q: 'Як тебе звати?', hint: 'Просто ім\'я', key: 'name' },
-  { q: 'Що зараз займає найбільше місця у твоїй голові?', hint: 'Не те що "важливо". Те що просто крутиться.', key: 'first' }
-];
-
-// ── AUTH ──────────────────────────────────────────────────────────
-function showReg() {
-  document.getElementById('login-form').style.display='none';
-  document.getElementById('reg-form').style.display='flex';
-}
-function showLogin() {
-  document.getElementById('reg-form').style.display='none';
-  document.getElementById('login-form').style.display='flex';
-}
-function showError(msg) {
-  const el = document.getElementById('auth-error');
-  el.textContent = msg; el.style.display='block';
-  setTimeout(()=>el.style.display='none', 3000);
-}
-
-async function doLogin() {
-  const email = document.getElementById('login-email').value.trim();
-  const pass = document.getElementById('login-pass').value;
-  if(!email||!pass) return showError('Заповни всі поля');
-  const users = await sbFetch(`/rest/v1/users?email=eq.${encodeURIComponent(email)}`);
-  if(!users||!users.length) return showError('Акаунт не знайдено');
-  currentUser = users[0];
-  startChat();
-}
-
-async function doRegister() {
-  const name = document.getElementById('reg-name').value.trim();
-  const email = document.getElementById('reg-email').value.trim();
-  const pass = document.getElementById('reg-pass').value;
-  if(!name||!email||!pass) return showError('Заповни всі поля');
-  onboardData.name = name;
-  onboardData.email = email;
-  onboardData.pass = pass;
-  showScreen('onboard');
-  updateOnboardStep(0);
-}
-
-// ── ONBOARDING ────────────────────────────────────────────────────
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-'+id).classList.add('active');
-}
-
-function updateOnboardStep(step) {
-  onboardStep = step;
-  document.querySelectorAll('.onboard-dot').forEach((d,i)=>{
-    d.classList.toggle('active', i<=step);
-  });
-  const s = onboardSteps[step];
-  document.getElementById('onboard-q').textContent = s.q;
-  document.getElementById('onboard-hint').textContent = s.hint;
-  document.getElementById('onboard-input').value = '';
-  document.getElementById('onboard-input').focus();
-}
-
-async function nextOnboard() {
-  const val = document.getElementById('onboard-input').value.trim();
-  if(!val) return;
-  onboardData[onboardSteps[onboardStep].key] = val;
-  if(onboardStep < onboardSteps.length - 1) {
-    updateOnboardStep(onboardStep + 1);
-  } else {
-    // Create user
-    try {
-      const astro = buildAstroProfile(onboardData.birthdate);
-      const res = await sbFetch('/rest/v1/users', {
-        method:'POST',
-        body: JSON.stringify({
-          email: onboardData.email,
-          name: onboardData.name,
-          birthdate: onboardData.birthdate,
-          astro: JSON.stringify(astro),
-          memory: ''
-        })
-      });
-      currentUser = res[0];
-      startChat(onboardData.first);
-    } catch(e) { alert('Помилка створення акаунту. Спробуй ще раз.'); }
-  }
-}
-
-document.getElementById('onboard-input').addEventListener('keydown', e=>{
-  if(e.key==='Enter') nextOnboard();
-});
-
-// ── CHAT ──────────────────────────────────────────────────────────
-function startChat(firstMessage) {
+function startChat(first){
   showScreen('chat');
-  const astro = currentUser.astro ? JSON.parse(currentUser.astro) : null;
-  if(currentUser.name) {
-    document.getElementById('chat-user-info').textContent =
-      astro ? `${currentUser.name} · ${astro.zodiac}` : currentUser.name;
-  }
-  if(firstMessage) {
-    setTimeout(()=>processMessage(firstMessage, true), 600);
-  } else {
-    setTimeout(()=>addBotMessage('Що зараз відбувається?'), 500);
-  }
+  const astro=user.astro?JSON.parse(user.astro):null;
+  document.getElementById('chat-meta').textContent=astro?`${user.name} · ${astro.zodiac}`:user.name||'';
+  if(first)setTimeout(()=>processMsg(first,true),600);
+  else setTimeout(()=>addBot('Що зараз відбувається?'),500);
 }
 
-function autoResize(el) {
-  el.style.height='auto';
-  el.style.height=Math.min(el.scrollHeight,100)+'px';
-  document.getElementById('send-btn').disabled = el.value.trim()==='';
-}
+function resize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,100)+'px';document.getElementById('send-btn').disabled=el.value.trim()===''}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();if(!document.getElementById('send-btn').disabled)send()}}
 
-function handleKey(e) {
-  if(e.key==='Enter'&&!e.shiftKey) {
-    e.preventDefault();
-    if(!document.getElementById('send-btn').disabled) send();
-  }
-}
-
-function addMessage(role, text) {
-  const msgs = document.getElementById('messages');
-  const div = document.createElement('div');
-  div.className = `msg ${role==='user'?'user':'bot'}`;
-  const who = document.createElement('div');
-  who.className = 'msg-who';
-  who.textContent = role==='user' ? (currentUser?.name||'Ти') : 'Свідок';
-  const bubble = document.createElement('div');
-  bubble.className = 'msg-bubble';
-  div.appendChild(who); div.appendChild(bubble);
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
+function addMsg(role,text){
+  const msgs=document.getElementById('messages');
+  const div=document.createElement('div');div.className=`msg ${role==='user'?'user':'bot'}`;
+  const who=document.createElement('div');who.className='msg-who';who.textContent=role==='user'?(user?.name||'Ти'):'Свідок';
+  const bubble=document.createElement('div');bubble.className='msg-bubble';
+  div.appendChild(who);div.appendChild(bubble);msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
   return bubble;
 }
 
-function addBotMessage(text) {
-  const bubble = addMessage('assistant', '');
-  typewrite(bubble, text);
+function addBot(text){
+  const b=addMsg('assistant','');
+  let i=0;b.textContent='';
+  function t(){if(i<text.length){b.textContent+=text[i];i++;document.getElementById('messages').scrollTop=99999;setTimeout(t,14)}}
+  t();
 }
 
-function typewrite(el, text, speed=15) {
-  let i=0;
-  el.textContent='';
-  function next() {
-    if(i<text.length) {
-      el.textContent+=text[i]; i++;
-      document.getElementById('messages').scrollTop=99999;
-      setTimeout(next, speed);
-    }
-  }
-  next();
+function showTyping(){
+  const msgs=document.getElementById('messages');
+  const div=document.createElement('div');div.className='msg bot';div.id='typ';
+  const who=document.createElement('div');who.className='msg-who';who.textContent='Свідок';
+  const t=document.createElement('div');t.className='typing';t.innerHTML='<span></span><span></span><span></span>';
+  div.appendChild(who);div.appendChild(t);msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
 }
+function removeTyping(){const e=document.getElementById('typ');if(e)e.remove()}
 
-function showTyping() {
-  const msgs = document.getElementById('messages');
-  const div = document.createElement('div');
-  div.className='msg bot'; div.id='typing-ind';
-  const who = document.createElement('div');
-  who.className='msg-who'; who.textContent='Свідок';
-  const t = document.createElement('div');
-  t.className='typing';
-  t.innerHTML='<span></span><span></span><span></span>';
-  div.appendChild(who); div.appendChild(t);
-  msgs.appendChild(div);
-  msgs.scrollTop=msgs.scrollHeight;
-}
-function removeTyping() {
-  const el=document.getElementById('typing-ind');
-  if(el) el.remove();
-}
-
-async function send() {
-  const input = document.getElementById('input');
-  const text = input.value.trim();
-  if(!text||isLoading) return;
-  input.value=''; input.style.height='auto';
+async function send(){
+  const input=document.getElementById('input');
+  const text=input.value.trim();
+  if(!text||loading)return;
+  input.value='';input.style.height='auto';
   document.getElementById('send-btn').disabled=true;
-  await processMessage(text, false);
+  await processMsg(text,false);
 }
 
-async function processMessage(text, isFirst) {
-  if(!isFirst) addMessage('user', text);
-  history.push({role:'user', content: text});
-  isLoading=true;
-  showTyping();
-  await new Promise(r=>setTimeout(r, 1000+Math.random()*800));
-  try {
-    const astro = currentUser?.astro ? JSON.parse(currentUser.astro) : null;
-    const profile = { astro, memory: currentUser?.memory||'' };
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{ 'Content-Type':'application/json',
-        'x-api-key': ANTHROPIC_KEY, 'anthropic-version':'2023-06-01' },
-      body: JSON.stringify({
-        model:'claude-sonnet-4-6', max_tokens:1000,
-        system: buildSystemPrompt(profile),
-        messages: history
-      })
-    });
-    const data = await res.json();
-    let reply = data.content?.[0]?.text || '...';
-    // Extract memory update
-    const memMatch = reply.match(/MEMORY_UPDATE:\s*(.+)$/m);
-    if(memMatch && memMatch[1] && memMatch[1]!=='none' && currentUser) {
-      const newMem = (currentUser.memory ? currentUser.memory+'\n' : '') + memMatch[1];
-      currentUser.memory = newMem;
-      await updateMemory(currentUser.id, newMem);
+async function processMsg(text,isFirst){
+  if(!isFirst)addMsg('user',text);
+  history.push({role:'user',content:text});
+  loading=true;showTyping();
+  await new Promise(r=>setTimeout(r,900+Math.random()*700));
+  try{
+    const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:history,system:buildSystem()})});
+    const data=await r.json();
+    let reply=data.content?.[0]?.text||'...';
+    const m=reply.match(/MEMORY_UPDATE:\s*(.+)$/m);
+    if(m&&m[1]&&m[1].trim()!=='none'&&user){
+      const newMem=(user.memory?user.memory+'\n':'')+m[1].trim();
+      user.memory=newMem;
+      fetch('/api/user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'updateMemory',userId:user.id,memory:newMem})});
     }
-    // Clean reply
-    reply = reply.replace(/\nMEMORY_UPDATE:.+$/m,'').trim();
-    removeTyping();
-    addBotMessage(reply);
-    history.push({role:'assistant', content: reply});
-  } catch(e) {
-    removeTyping();
-    addBotMessage('Щось пішло не так. Спробуй ще раз.');
-  }
-  isLoading=false;
+    reply=reply.replace(/\nMEMORY_UPDATE:.+$/m,'').trim();
+    removeTyping();addBot(reply);
+    history.push({role:'assistant',content:reply});
+  }catch(e){removeTyping();addBot('Щось пішло не так. Спробуй ще раз.')}
+  loading=false;
 }
 </script>
 </body>
